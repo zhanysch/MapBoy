@@ -68,9 +68,46 @@ public class DragAndDrop {
         blueBox = driver.findElement(By.xpath("//div[@class='test1']"));
 
         String actualAfterAction = BrowserUtils.getText(blueBox);
-        String expectedAfterAction = "You did great!";
+        String expectedAfterAction = "Drag the small circle here ...";
         Assert.assertEquals(actualAfterAction, expectedAfterAction);
 
+
+    }
+
+    @Test
+    public void practiceDragAndDrop2(){
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://demos.telerik.com/kendo-ui/dragdrop/area");
+
+       /* WebElement titleTag = driver.findElement(By.xpath("//div[@id='droppable']//p[.='Drop here']"));
+        String actualBeforeTitl = BrowserUtils.getText(titleTag);
+        String expectedBeforeTitl = "Drop here";
+        Assert.assertEquals(actualBeforeTitl, expectedBeforeTitl);*/
+
+        WebElement Box = driver.findElement(By.xpath("//div[@id='droptarget']//div[@class='test2']"));
+        WebElement draggable = driver.findElement(By.xpath("//div[@id='draggable']"));
+        Actions actions = new Actions(driver);
+        actions.clickAndHold(draggable).moveToElement(Box).release().perform();
+
+//        WebElement bucket = driver.findElement(By.xpath("//div[@id='droptarget']//div[@class='test2']"));
+//
+//        WebElement draggableBox = driver.findElement(By.xpath("//div[@id='draggable']"));
+//        Actions actions = new Actions(driver);
+
+       /* actions.clickAndHold(draggableBox).moveToElement(bucket).release().perform();*/
+
+      /*  WebElement NotAcceptableMessage = driver.findElement(By.xpath("//div[@id='notAcceptable']"));
+        String expectedMessage = "Not Acceptable";
+        Assert.assertEquals(BrowserUtils.getText(NotAcceptableMessage),expectedMessage);*/
+
+        WebElement actualMessageAfter = driver.findElement(By.xpath("//div[@id='droptarget']//div[@class='test2']"));
+        String expectedMessageAfter = "You did great!";
+        Assert.assertEquals(BrowserUtils.getText(actualMessageAfter),expectedMessageAfter);
 
     }
 }
