@@ -69,10 +69,5 @@ public class LocatorsIntro2 {
         System.out.println(driver.getTitle());
 
 
-        /*
-
-
-         */
-
     }
 }

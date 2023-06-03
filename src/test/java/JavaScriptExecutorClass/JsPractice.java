@@ -65,7 +65,7 @@ public class JsPractice {
     }
 
     @Test
-    public void Practice2(){
+    public void Practice2() throws InterruptedException {
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--remote-allow-origins=*");
@@ -77,6 +77,8 @@ public class JsPractice {
         WebElement blabla = driver.findElement(By.xpath("//div[contains(text(),'Copyright © 2023')]"));
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView(true)", blabla);
+
+        Thread.sleep(3000);
         String actualMesage = BrowserUtils.getText(blabla);
         String expectesMessage = "Copyright © 2023";
         Assert.assertEquals(actualMesage,expectesMessage);
@@ -99,5 +101,46 @@ public class JsPractice {
 
 
 
+    }
+
+    @Test
+    public void Practice3() throws InterruptedException {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://www.techtorialacademy.com/");
+
+        WebElement copyRightText= driver.findElement(By.xpath("//div[contains(text(),'Copyright')]"));
+//JavascriptExecutor js = (JavascriptExecutor) driver;
+//js.executeScript("arguments[0].scrollIntoView(true)",copyRightText);
+        BrowserUtils.scrollWithJs(driver,copyRightText);
+        Thread.sleep(2000);
+        String actualText=BrowserUtils.getText(copyRightText);
+        String expectedText = "Copyright © 2023";
+        Assert.assertEquals(actualText,expectedText);
+
+        WebElement topText = driver.findElement(By.xpath("//b[contains(text(),'NEW TECH')]"));
+        BrowserUtils.scrollWithJs(driver,topText);
+        Thread.sleep(2000);
+        WebElement applyNowButton = driver.findElement(By.xpath("//span[.='Apply Now']"));
+//js.executeScript("arguments[0].click()",applyNowButton);
+        BrowserUtils.clickWithJs(driver,applyNowButton);
+        Thread.sleep(2000);
+
+//js.executeScript("return document.title");
+        String actualTitle = BrowserUtils.getTitleWithJS(driver);
+        String expectedTitle ="Apply Now";
+        Assert.assertEquals(actualTitle,expectedTitle);
+
+        List<WebElement> actualList = driver.findElements(By.xpath("//h3[@data-element-id='heading3Normal']"));
+        List<String> expectedList = Arrays.asList("info@techtorialacademy.com","+ 1 (224) 570 91 91","Chicago & Houston");
+
+
+        for(int i = 0; i<actualList.size(); i++){
+            Assert.assertEquals(BrowserUtils.getText(actualList.get(i)),expectedList.get(i));
+        }
     }
 }
